@@ -20,4 +20,12 @@ public class UserService {
             throw new RuntimeException(String.format("Email '%s' already exists.", user.getEmail()));
         }
     }
+
+    @Transactional(readOnly = true)
+    public User get(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(
+                        () -> new RuntimeException(String.format("User with id'%s' not found.", id))
+                );
+    }
 }
