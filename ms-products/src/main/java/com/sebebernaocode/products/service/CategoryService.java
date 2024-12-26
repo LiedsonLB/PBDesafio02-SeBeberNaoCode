@@ -17,4 +17,11 @@ public class CategoryService {
     public Category save(Category category) {
         return categoryRepository.save(category);
     }
+
+    @Transactional(readOnly = true)
+    public Category findById(Long id) {
+        return categoryRepository.findById(id).orElseThrow(
+            () -> new RuntimeException("user not found")
+        );
+    }
 }
