@@ -1,10 +1,7 @@
 package com.sebebernaocode.authorization.controllers;
 
 import com.sebebernaocode.authorization.entities.user.User;
-import com.sebebernaocode.authorization.entities.user.dto.UserCreateDto;
-import com.sebebernaocode.authorization.entities.user.dto.UserMapper;
-import com.sebebernaocode.authorization.entities.user.dto.UserResponseDto;
-import com.sebebernaocode.authorization.entities.user.dto.UserUpdateDto;
+import com.sebebernaocode.authorization.entities.user.dto.*;
 import com.sebebernaocode.authorization.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +32,13 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable("id") Long id, @RequestBody @Valid UserUpdateDto dto) {
         userService.update(id, dto);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/password")
+    public ResponseEntity<Void> updatePassword(@PathVariable("id") Long id, @RequestBody @Valid UserUpdatePasswordDto dto){
+        userService.updatePassword(id, dto);
 
         return ResponseEntity.noContent().build();
     }
