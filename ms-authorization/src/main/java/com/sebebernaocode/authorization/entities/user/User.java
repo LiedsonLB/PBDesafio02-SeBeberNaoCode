@@ -1,11 +1,14 @@
 package com.sebebernaocode.authorization.entities.user;
 
 
+import com.sebebernaocode.authorization.entities.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_users")
@@ -13,7 +16,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +32,15 @@ public class User implements Serializable {
 
     @Column(nullable = false)
     private String password;
+
+    @ManyToMany
+    @JoinTable(
+            name = "tb_user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @Setter(AccessLevel.NONE)
+    private Set<Role> roles = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

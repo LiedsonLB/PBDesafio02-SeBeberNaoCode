@@ -17,7 +17,7 @@ public class RoleDataInitializer {
 
         for (String role : roles){
             if (!roleRepository.existsRoleByName(role))
-                roleRepository.save(new Role(null, role));
+                roleRepository.save(new Role(role));
         }
     }
 }
