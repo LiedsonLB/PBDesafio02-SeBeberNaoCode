@@ -32,8 +32,8 @@ public class SecurityConfiguration {
                                 .requestMatchers(
                                         antMatcher(HttpMethod.POST, "api/oauth/token"),
                                         antMatcher(HttpMethod.POST, "api/users"),
-                                        antMatcher("/docs-park.html"),
-                                        antMatcher("/docs-park/**"),
+                                        antMatcher("/ms-authorization.html"),
+                                        antMatcher("/ms-authorization/**"),
                                         antMatcher("/swagger-ui.html"),
                                         antMatcher("/swagger-ui/**"),
                                         antMatcher("/webjars/**")
