@@ -25,6 +25,12 @@ public class Category implements Serializable {
     @Column(name="name", nullable = false, length = 50)
     private String name;
 
+    public void updateFrom(Category category) {
+        if (category.getName() != null) {
+            this.name = category.getName();
+        }
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

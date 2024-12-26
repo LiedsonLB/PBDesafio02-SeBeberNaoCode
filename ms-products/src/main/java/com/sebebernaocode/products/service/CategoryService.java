@@ -24,4 +24,11 @@ public class CategoryService {
             () -> new RuntimeException("user not found")
         );
     }
+
+    @Transactional
+    public Category updateCategory(long id, Category category) {
+        Category oldCategory = findById(id); 
+        oldCategory.updateFrom(category);
+        return categoryRepository.save(oldCategory);
+    }
 }
