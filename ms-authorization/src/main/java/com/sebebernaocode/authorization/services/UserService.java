@@ -2,6 +2,10 @@ package com.sebebernaocode.authorization.services;
 
 import com.sebebernaocode.authorization.entities.user.User;
 import com.sebebernaocode.authorization.entities.user.dto.UserUpdateDto;
+import com.sebebernaocode.authorization.entities.user.dto.UserUpdatePasswordDto;
+import com.sebebernaocode.authorization.exceptions.EntityNotFoundException;
+import com.sebebernaocode.authorization.exceptions.InvalidPasswordException;
+import com.sebebernaocode.authorization.exceptions.UniqueViolationException;
 import com.sebebernaocode.authorization.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,7 +22,7 @@ public class UserService {
         try {
             return userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
-            throw new RuntimeException(String.format("Email '%s' already exists.", user.getEmail()));
+            throw new UniqueViolationException(String.format("Email '%s' already exists.", user.getEmail()));
         }
     }
 
@@ -26,7 +30,7 @@ public class UserService {
     public User get(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(
-                        () -> new RuntimeException(String.format("User with id'%s' not found.", id))
+                        () -> new EntityNotFoundException(String.format("User with id'%s' not found.", id))
                 );
     }
 
@@ -41,7 +45,7 @@ public class UserService {
                 boolean emailExists = userRepository.existsUserByEmail(dto.getEmail());
 
                 if (emailExists)
-                    throw new RuntimeException(String.format("Email '%s' already exists.", dto.getEmail()));
+                    throw new UniqueViolationException(String.format("Email '%s' already exists.", dto.getEmail()));
 
                 user.setEmail(dto.getEmail());
             }
@@ -52,5 +56,22 @@ public class UserService {
 
         if (dto.getLastName() != null)
             user.setLastName(dto.getLastName());
+    }
+
+    @Transactional
+    public void updatePassword(Long id, UserUpdatePasswordDto dto){
+        String newPassword = dto.getNewPassword();
+        String confirmNewPassword = dto.getConfirmNewPassword();
+
+        if (!newPassword.equals(confirmNewPassword))
+            throw new InvalidPasswordException("New password and confirmation are different.");
+
+        String password = dto.getPassword();
+        User user = get(id);
+
+        if (!password.equals(user.getPassword()))
+            throw new InvalidPasswordException("Invalid password.");
+
+        user.setPassword(newPassword);
     }
 }
