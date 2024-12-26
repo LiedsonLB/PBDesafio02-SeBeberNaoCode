@@ -4,8 +4,12 @@ package com.sebebernaocode.authorization.entities.user;
 import com.sebebernaocode.authorization.entities.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -16,7 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-public class User implements Serializable {
+public class User implements Serializable, UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,7 +37,7 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "tb_user_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -41,6 +45,19 @@ public class User implements Serializable {
     )
     @Setter(AccessLevel.NONE)
     private Set<Role> roles = new HashSet<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles
+                .stream().map(
+                        role -> new SimpleGrantedAuthority(role.getName())
+                ).toList();
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
 
     @Override
     public boolean equals(Object o) {
