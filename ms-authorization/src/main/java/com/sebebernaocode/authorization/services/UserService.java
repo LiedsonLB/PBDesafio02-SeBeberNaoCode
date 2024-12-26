@@ -9,6 +9,7 @@ import com.sebebernaocode.authorization.exceptions.UniqueViolationException;
 import com.sebebernaocode.authorization.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,10 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
 
     @Transactional
     public User create(User user) {
         try {
+            user.setPassword(encoder.encode(user.getPassword()));
             return userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new UniqueViolationException(String.format("Email '%s' already exists.", user.getEmail()));
@@ -69,9 +72,9 @@ public class UserService {
         String password = dto.getPassword();
         User user = get(id);
 
-        if (!password.equals(user.getPassword()))
+        if (!encoder.matches(password, user.getPassword()))
             throw new InvalidPasswordException("Invalid password.");
 
-        user.setPassword(newPassword);
+        user.setPassword(encoder.encode(newPassword));
     }
 }
