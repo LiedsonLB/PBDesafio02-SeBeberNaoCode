@@ -9,6 +9,7 @@ import com.sebebernaocode.authorization.exceptions.UniqueViolationException;
 import com.sebebernaocode.authorization.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,5 +77,12 @@ public class UserService {
             throw new InvalidPasswordException("Invalid password.");
 
         user.setPassword(encoder.encode(newPassword));
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(
+                        () -> new EntityNotFoundException(String.format("User with email'%s' not found.", email))
+                );
     }
 }
