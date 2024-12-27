@@ -30,8 +30,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers(
-                                        antMatcher(HttpMethod.POST, "api/oauth/token"),
-                                        antMatcher(HttpMethod.POST, "api/users"),
+                                        antMatcher(HttpMethod.POST, "/api/oauth/token"),
+                                        antMatcher(HttpMethod.POST, "/api/users"),
                                         antMatcher("/ms-authorization.html"),
                                         antMatcher("/ms-authorization/**"),
                                         antMatcher("/swagger-ui.html"),

@@ -17,7 +17,7 @@ import java.util.Set;
 @Entity
 @Table(name = "tb_users")
 @NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 public class User implements Serializable, UserDetails {
@@ -25,15 +25,19 @@ public class User implements Serializable, UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NonNull
     @Column(nullable = false, length = 100)
     private String firstName;
 
+    @NonNull
     @Column(nullable = false, length = 100)
     private String lastName;
 
+    @NonNull
     @Column(nullable = false, unique = true)
     private String email;
 
+    @NonNull
     @Column(nullable = false)
     private String password;
 
