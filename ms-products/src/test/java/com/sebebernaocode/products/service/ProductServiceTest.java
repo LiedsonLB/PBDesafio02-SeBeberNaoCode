@@ -3,17 +3,21 @@ package com.sebebernaocode.products.service;
 import static org.assertj.core.api.Assertions.*;
 import static com.sebebernaocode.products.common.ProductConstants.PRODUCT;
 import static com.sebebernaocode.products.common.ProductConstants.INVALID_PRODUCT;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 
 import com.sebebernaocode.products.entity.Product;
+import com.sebebernaocode.products.exception.EntityNotFoundException;
 import com.sebebernaocode.products.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -39,5 +43,21 @@ public class ProductServiceTest {
         when(productRepository.save(INVALID_PRODUCT)).thenThrow(RuntimeException.class);
 
         assertThatThrownBy( () -> productService.create(INVALID_PRODUCT) ).isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    public void findProductById_WithExistingId_ReturnsProduct() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.of(PRODUCT));
+
+        Product sut = productService.findById(1L);
+
+        assertThat(sut).isEqualTo(PRODUCT);
+    }
+
+    @Test
+    public void findProductById_WithUnexistingId_ReturnsErrorStatus404() {
+        doThrow(new EntityNotFoundException("Product not found")).when(productRepository).findById(99L);
+
+        assertThatThrownBy( () -> productService.findById(99L) ).isInstanceOf(EntityNotFoundException.class);
     }
 }

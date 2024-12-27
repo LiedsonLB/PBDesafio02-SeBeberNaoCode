@@ -1,5 +1,6 @@
 package com.sebebernaocode.products.web.dto;
 
+import com.sebebernaocode.products.entity.Category;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class ProductCreateDto {
@@ -23,4 +25,6 @@ public class ProductCreateDto {
 
     @DecimalMin("0.0")
     private BigDecimal price;
+
+    private Set<Category> categories;
 }
