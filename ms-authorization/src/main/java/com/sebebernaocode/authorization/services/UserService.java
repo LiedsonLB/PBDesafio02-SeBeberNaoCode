@@ -6,10 +6,10 @@ import com.sebebernaocode.authorization.entities.user.dto.UserUpdatePasswordDto;
 import com.sebebernaocode.authorization.exceptions.EntityNotFoundException;
 import com.sebebernaocode.authorization.exceptions.InvalidPasswordException;
 import com.sebebernaocode.authorization.exceptions.UniqueViolationException;
+import com.sebebernaocode.authorization.repositories.RoleRepository;
 import com.sebebernaocode.authorization.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,12 +18,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder encoder;
 
     @Transactional
     public User create(User user) {
         try {
             user.setPassword(encoder.encode(user.getPassword()));
+            user.getRoles().add(roleRepository.findByName("ROLE_OPERATOR")
+                    .orElseThrow(
+                            () -> new EntityNotFoundException("Role 'OPERATOR' not found.")
+                    ));
             return userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new UniqueViolationException(String.format("Email '%s' already exists.", user.getEmail()));
