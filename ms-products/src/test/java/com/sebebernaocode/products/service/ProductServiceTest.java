@@ -4,8 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static com.sebebernaocode.products.common.ProductConstants.PRODUCT;
 import static com.sebebernaocode.products.common.ProductConstants.INVALID_PRODUCT;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 import com.sebebernaocode.products.entity.Product;
@@ -59,5 +58,21 @@ public class ProductServiceTest {
         doThrow(new EntityNotFoundException("Product not found")).when(productRepository).findById(99L);
 
         assertThatThrownBy( () -> productService.findById(99L) ).isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
+    public void deleteProduct_WithExistingId_doesNotThrowAnyException() {
+        when(productRepository.existsById(anyLong())).thenReturn(true);
+
+        productService.delete(1L);
+
+        verify(productRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    public void deleteProduct_WithUnexistingId_ThrowsException() {
+        when(productRepository.existsById(anyLong())).thenReturn(false);
+
+        assertThatThrownBy( () -> productService.delete(1L) ).isInstanceOf(EntityNotFoundException.class);
     }
 }

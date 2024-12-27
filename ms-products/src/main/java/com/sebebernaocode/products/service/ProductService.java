@@ -5,6 +5,7 @@ import com.sebebernaocode.products.entity.Product;
 import com.sebebernaocode.products.exception.EntityNotFoundException;
 import com.sebebernaocode.products.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,5 +39,18 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(String.format("product id: %s not found in the database", id))
         );
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        try {
+            if (productRepository.existsById(id)) {
+                productRepository.deleteById(id);
+            } else {
+                throw new EntityNotFoundException(String.format("product id: %s not found in the database", id));
+            }
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException(String.format("Error trying to delete product, error: %s", e.getMessage()));
+        }
     }
 }

@@ -49,7 +49,7 @@ public class ProductController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Recurso localizado com sucesso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductResponseDto.class))),
-                    @ApiResponse(responseCode = "404", description = "Não foi localizar o recurso",
+                    @ApiResponse(responseCode = "404", description = "Não foi possível localizar o recurso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             }
     )
@@ -58,5 +58,20 @@ public class ProductController {
         Product product = productService.findById(id);
         ProductResponseDto dto = ProductMapper.toDto(product);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
+    }
+
+    @Operation(
+            summary = "Deletar um produto.",
+            description = "Recurso para deletar um produto por id.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Recurso deletado com sucesso"),
+                    @ApiResponse(responseCode = "404", description = "Não foi possível localizar o recurso",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+            }
+    )
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        productService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

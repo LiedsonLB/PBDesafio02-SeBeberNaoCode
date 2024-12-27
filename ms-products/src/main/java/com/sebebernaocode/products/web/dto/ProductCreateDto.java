@@ -26,5 +26,6 @@ public class ProductCreateDto {
     @DecimalMin("0.0")
     private BigDecimal price;
 
+    @NotEmpty
     private Set<Category> categories;
 }
