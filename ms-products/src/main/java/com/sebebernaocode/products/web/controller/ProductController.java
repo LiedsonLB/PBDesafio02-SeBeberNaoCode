@@ -15,10 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Produtos", description = "Contém os recursos de gerenciamento de produtos.")
 @RequiredArgsConstructor
@@ -44,5 +41,22 @@ public class ProductController {
         product = productService.create(product);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(ProductMapper.toDto(product));
+    }
+
+    @Operation(
+            summary = "Buscar um produto.",
+            description = "Recurso para buscar um produto por id.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Recurso localizado com sucesso",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductResponseDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Não foi localizar o recurso",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+            }
+    )
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponseDto> getById(@PathVariable Long id) {
+        Product product = productService.findById(id);
+        ProductResponseDto dto = ProductMapper.toDto(product);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 }

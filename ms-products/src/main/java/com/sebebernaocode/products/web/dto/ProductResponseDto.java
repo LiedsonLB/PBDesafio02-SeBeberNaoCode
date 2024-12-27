@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class ProductResponseDto {
@@ -18,5 +18,5 @@ public class ProductResponseDto {
     private String description;
     private String imgUrl;
     private BigDecimal price;
-    private List<Category> categories;
+    private Set<Category> categories;
 }
