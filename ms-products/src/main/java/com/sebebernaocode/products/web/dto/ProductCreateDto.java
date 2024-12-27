@@ -1,9 +1,14 @@
 package com.sebebernaocode.products.web.dto;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.math.BigDecimal;
+
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class ProductCreateDto {
 
     @NotBlank
@@ -16,7 +21,6 @@ public class ProductCreateDto {
 
     private String imgUrl;
 
-    @NotBlank
-    @Min(value = 0, message = "The price of the product must be greater than 0")
-    private Double price;
+    @DecimalMin("0.0")
+    private BigDecimal price;
 }

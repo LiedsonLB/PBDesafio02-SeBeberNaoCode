@@ -6,7 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -28,13 +29,13 @@ public class Product {
     private String description;
 
     @Column(name = "created_date", nullable = false)
-    private Date date;
+    private LocalDateTime date;
 
     @Column(name = "imgUrl")
     private String imgUrl;
 
     @Column(name = "price", nullable = false)
-    private Double price;
+    private BigDecimal price;
 
     @ManyToMany
     @JoinTable(name = "tb_product_category",
