@@ -31,4 +31,9 @@ public class CategoryService {
         oldCategory.updateFrom(category);
         return categoryRepository.save(oldCategory);
     }
+
+    @Transactional
+    public Category deleteCategory(Long id) {
+        return null;
+    }
 }
