@@ -19,6 +19,13 @@ spring:
       smtp:
         starttls:
           enable: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 server:
   port: 0

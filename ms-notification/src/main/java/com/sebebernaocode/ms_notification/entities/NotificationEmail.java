@@ -2,11 +2,11 @@ package com.sebebernaocode.ms_notification.entities;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 
-@Data
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name="tb_email")
 public class NotificationEmail implements Serializable {
