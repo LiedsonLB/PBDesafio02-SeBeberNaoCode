@@ -1,17 +1,48 @@
 package com.sebebernaocode.products.web.controller;
 
+import com.sebebernaocode.products.entity.Product;
 import com.sebebernaocode.products.service.ProductService;
+import com.sebebernaocode.products.web.dto.ProductCreateDto;
+import com.sebebernaocode.products.web.dto.ProductResponseDto;
+import com.sebebernaocode.products.web.dto.mapper.ProductMapper;
+import com.sebebernaocode.products.web.exception.ErrorMessage;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Produtos", description = "Contém os recursos de gerenciamento de produtos.")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/products")
+@RequestMapping(value = "api/products")
 public class ProductController {
 
     private final ProductService productService;
-    
+
+    @Operation(
+            summary = "Criar um novo produto.",
+            description = "Recurso para criar um novo produto.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Recurso criado com sucesso",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductResponseDto.class))),
+                    @ApiResponse(responseCode = "422", description = "Não foi possível criar o recurso, pois os dados de entrada são inválidos",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+            }
+    )
+    @PostMapping
+    public ResponseEntity<ProductResponseDto> create(@RequestBody @Valid ProductCreateDto dto) {
+        Product product = ProductMapper.toProduct(dto);
+        product = productService.create(product);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(ProductMapper.toDto(product));
+    }
 }
