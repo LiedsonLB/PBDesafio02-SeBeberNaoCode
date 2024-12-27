@@ -1,5 +1,6 @@
 package com.sebebernaocode.authorization.services;
 
+import com.sebebernaocode.authorization.entities.role.Role;
 import com.sebebernaocode.authorization.entities.user.User;
 import com.sebebernaocode.authorization.entities.user.dto.UserUpdateDto;
 import com.sebebernaocode.authorization.entities.user.dto.UserUpdatePasswordDto;
@@ -32,6 +33,20 @@ public class UserService {
             return userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new UniqueViolationException(String.format("Email '%s' already exists.", user.getEmail()));
+        }
+    }
+
+    @Transactional
+    public void createAdmin() {
+        if (!userRepository.existsUserByRolesName("ROLE_ADMIN")) {
+            Role admin = roleRepository.findByName("ROLE_ADMIN")
+                    .orElseThrow(
+                            () -> new EntityNotFoundException("Role 'ADMIN' not found.")
+                    );
+
+            User user = create(new User("User", "Admin", "admin@mail.com", "admin"));
+            user.getRoles().add(admin);
+            userRepository.save(user);
         }
     }
 
@@ -68,7 +83,7 @@ public class UserService {
     }
 
     @Transactional
-    public void updatePassword(Long id, UserUpdatePasswordDto dto){
+    public void updatePassword(Long id, UserUpdatePasswordDto dto) {
         String newPassword = dto.getNewPassword();
         String confirmNewPassword = dto.getConfirmNewPassword();
 
