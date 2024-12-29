@@ -1,0 +1,2 @@
+INSERT INTO tb_email (body, cc, content_type, from_email, from_name, subject, to_email, to_name) VALUES ('teste', '', 'JSON', 'juanito@gmail.com', 'juanito', 'teste', 'ana@gmail.com', 'ana');
+INSERT INTO tb_email (body, cc, content_type, from_email, from_name, subject, to_email, to_name) VALUES ('test', '', 'JSON', 'juanio@gmail.com', 'juanio', 'tste', 'ana@gail.com', 'aea');
