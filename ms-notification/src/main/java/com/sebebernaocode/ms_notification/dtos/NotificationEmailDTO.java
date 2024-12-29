@@ -7,11 +7,11 @@ import lombok.Data;
 @Data
 public class NotificationEmailDTO {
     @NotBlank
-    @Email
-    private String emailFrom;
+    @Email(regexp = "marchesaneduardofw@gmail.com", message = "Invalid e-mail format")
+    private String fromEmail;
     @NotBlank
     @Email
-    private String emailTo;
+    private String toEmail;
     @NotBlank
     private String subject;
     @NotBlank

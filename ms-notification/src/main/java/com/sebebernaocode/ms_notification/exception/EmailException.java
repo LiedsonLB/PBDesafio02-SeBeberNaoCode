@@ -1,5 +1,10 @@
 package com.sebebernaocode.ms_notification.exception;
 
-public class EmailException extends RuntimeException {
-    public EmailException(String message) {}
+import org.springframework.amqp.AmqpRejectAndDontRequeueException;
+
+public class EmailException extends AmqpRejectAndDontRequeueException {
+    public EmailException(String message) {
+
+        super(message);
+    }
 }

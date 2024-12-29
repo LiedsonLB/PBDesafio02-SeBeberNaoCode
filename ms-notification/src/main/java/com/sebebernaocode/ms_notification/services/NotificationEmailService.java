@@ -3,12 +3,14 @@ package com.sebebernaocode.ms_notification.services;
 import com.sebebernaocode.ms_notification.exception.EmailException;
 import com.sebebernaocode.ms_notification.entities.NotificationEmail;
 import com.sebebernaocode.ms_notification.repositories.NotificationEmailRepository;
+import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class NotificationEmailService {
@@ -18,7 +20,8 @@ public class NotificationEmailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    public NotificationEmail send(NotificationEmail notificationEmail) {
+    @Transactional
+    public void send(NotificationEmail notificationEmail) {
         try{
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(notificationEmail.getFromEmail());
@@ -27,11 +30,17 @@ public class NotificationEmailService {
             message.setText(notificationEmail.getBody());
             javaMailSender.send(message);
         }
-        catch (EmailException e){
-            e.printStackTrace();
+        catch (Exception e) {
+            throw new EmailException(e.getMessage());
         }
-
-        return notificationEmailRepository.save(notificationEmail);
+    }
+    public NotificationEmail save(NotificationEmail notificationEmail) {
+        try{
+            return notificationEmailRepository.save(notificationEmail);
+        }
+        catch (Exception e) {
+            throw new EmailException(e.getMessage());
+        }
     }
 
     public Page<NotificationEmail> findAll(Pageable pageable) {

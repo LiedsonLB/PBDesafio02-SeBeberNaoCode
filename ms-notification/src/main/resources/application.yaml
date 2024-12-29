@@ -2,16 +2,17 @@ spring:
   application:
     name: ms-notification
   rabbitmq:
+    queue: send-email
     host: localhost
     port: 5672
     username: guest
     password: guest
 
   mail:
-    host: smtp.gmail.com
+    host: smtp.sendgrid.net
     port: 587
-    username: marchesaneduardofw@gmail.com
-    password: istj zkoy ataz jxyq
+    username: apikey
+    password: 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
     properties:
       mail:
         smtp:
@@ -28,15 +29,5 @@ spring:
       ddl-auto: update
 
 server:
-  port: 0
+  port: 8081
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-  instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-
-mq:
-  queues:
-    send-email: send-email

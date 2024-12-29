@@ -8,7 +8,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication (exclude = {SecurityAutoConfiguration.class})
 @EnableRabbit
-@EnableDiscoveryClient
 public class MsNotificationApplication {
 
 	public static void main(String[] args) {

@@ -2,6 +2,7 @@ package com.sebebernaocode.ms_notification.entities;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.io.Serializable;
@@ -16,6 +17,7 @@ public class NotificationEmail implements Serializable {
     private int emailId;
 
     private String fromName;
+    @Email(regexp = "marchesaneduardofw@gmail.com", message = "Invalid e-mail format")
     private String fromEmail;
     private String toEmail;
     private String toName;
