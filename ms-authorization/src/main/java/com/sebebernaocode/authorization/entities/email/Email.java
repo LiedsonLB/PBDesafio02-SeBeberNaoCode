@@ -7,22 +7,12 @@ import lombok.Setter;
 
 @Getter @Setter
 public class Email {
-    private String from;
+    private String fromEmail;
     @NotBlank
-    private String to;
+    private String toEmail;
     @NotBlank
     private String subject;
     @NotBlank
     private String body;
-
-    @Override
-    public String toString() {
-        return "{\n" +
-                "\"fromEmail\": \"" + from + "\",\n" +
-                "\"toEmail\": \""+ to + "\",\n" +
-                "\"subject\": \"" + subject + "\",\n" +
-                "\"body\": \""+ body + "\"\n" +
-                "}";
-    }
 }
 
