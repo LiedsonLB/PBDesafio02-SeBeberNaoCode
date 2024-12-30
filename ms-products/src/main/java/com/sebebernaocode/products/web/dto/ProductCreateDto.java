@@ -27,5 +27,5 @@ public class ProductCreateDto {
     private BigDecimal price;
 
     @NotEmpty
-    private Set<Category> categories;
+    private Set<Long> categories;
 }
