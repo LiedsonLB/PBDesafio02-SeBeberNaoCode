@@ -44,7 +44,7 @@ public class UserService {
                             () -> new EntityNotFoundException("Role 'ADMIN' not found.")
                     );
 
-            User user = create(new User("User", "Admin", "admin@mail.com", "admin"));
+            User user = create(new User("User", "Admin", "admin@mail.com", "admin1"));
             user.getRoles().add(admin);
             userRepository.save(user);
         }
