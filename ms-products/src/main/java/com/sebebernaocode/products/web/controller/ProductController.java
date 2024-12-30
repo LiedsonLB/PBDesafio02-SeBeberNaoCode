@@ -49,7 +49,7 @@ public class ProductController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Recurso localizado com sucesso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductResponseDto.class))),
-                    @ApiResponse(responseCode = "404", description = "Não foi localizar o recurso",
+                    @ApiResponse(responseCode = "404", description = "Não foi possivel localizar o recurso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             }
     )

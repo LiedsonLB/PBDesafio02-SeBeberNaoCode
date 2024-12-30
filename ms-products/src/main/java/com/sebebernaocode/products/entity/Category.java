@@ -2,6 +2,8 @@ package com.sebebernaocode.products.entity;
 
 import java.io.Serializable;
 
+import com.sebebernaocode.products.web.dto.CategoryCreateDto;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,22 +15,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name="categories")
+@Table(name = "categories")
 public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private Long id;
 
-    
-    @Column(name="name", nullable = false, length = 50)
+    @Column(name = "name", nullable = false, unique = true, length = 20)
     private String name;
 
-    public void updateFrom(Category category) {
-        if (category.getName() != null) {
-            this.name = category.getName();
+    public void updateFrom(CategoryCreateDto dto) {
+        if (dto.getName() != null) {
+            this.name = dto.getName();
         }
     }
 

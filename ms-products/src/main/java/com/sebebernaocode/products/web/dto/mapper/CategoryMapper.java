@@ -7,6 +7,7 @@ import com.sebebernaocode.products.web.dto.CategoryCreateDto;
 import com.sebebernaocode.products.web.dto.CategoryResponseDto;
 
 public class CategoryMapper {
+
     public static Category toCategory(CategoryCreateDto createDto) {
         return new ModelMapper().map(createDto, Category.class);
     }
