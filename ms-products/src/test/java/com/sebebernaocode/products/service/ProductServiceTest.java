@@ -13,6 +13,7 @@ import com.sebebernaocode.products.exception.EntityNotFoundException;
 import com.sebebernaocode.products.exception.InvalidQueryParameterException;
 import com.sebebernaocode.products.repository.ProductRepository;
 import com.sebebernaocode.products.repository.projection.ProductProjection;
+import com.sebebernaocode.products.web.dto.ProductCreateDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +21,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 
+import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
 
 
@@ -60,7 +63,7 @@ public class ProductServiceTest {
 
     @Test
     public void findProductById_WithUnexistingId_ReturnsErrorStatus404() {
-        doThrow(new EntityNotFoundException("Product not found")).when(productRepository).findById(99L);
+        when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThatThrownBy( () -> productService.findById(99L) ).isInstanceOf(EntityNotFoundException.class);
     }
@@ -151,5 +154,46 @@ public class ProductServiceTest {
         exception = assertThrows(InvalidQueryParameterException.class, () -> productService.createPageable(page, linesPerPage, sort));
 
         assertThat(exception.getMessage()).isEqualTo("Page index must not be less than zero");
+    }
+
+    @Test
+    public void updateProduct_WithValidData_ReturnsUpdatedProduct() {
+        Product existingProduct = new Product();
+        existingProduct.setId(PRODUCT.getId());
+        existingProduct.setName(PRODUCT.getName());
+        existingProduct.setDescription(PRODUCT.getDescription());
+        existingProduct.setPrice(PRODUCT.getPrice());
+        existingProduct.setDescription(PRODUCT.getDescription());
+        existingProduct.setCategories(PRODUCT.getCategories());
+
+        when(productRepository.findById(1L)).thenReturn(Optional.of(existingProduct));
+
+        ProductCreateDto dto = new ProductCreateDto();
+        dto.setName("updated name");
+        dto.setDescription("updated description");
+        dto.setImgUrl("updated imgUrl");
+        dto.setPrice(new BigDecimal(10000));
+        dto.setCategories(new HashSet<>());
+
+        when(productRepository.save(any(Product.class))).thenReturn(existingProduct);
+
+        Product updatedProduct = productService.updateProduct(1L, dto);
+
+        assertThat(updatedProduct.getName()).isEqualTo(dto.getName());
+        assertThat(updatedProduct.getDescription()).isEqualTo(dto.getDescription());
+        assertThat(updatedProduct.getImgUrl()).isEqualTo(dto.getImgUrl());
+        assertThat(updatedProduct.getPrice()).isEqualTo(new BigDecimal(10000));
+        verify(productRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    public void updateProduct_WithUnexistingId_ThrowsException() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        ProductCreateDto dto = new ProductCreateDto();
+
+        assertThrows(EntityNotFoundException.class, () -> productService.updateProduct(1L, dto));
+
+        verify(productRepository, never()).save(any(Product.class));
     }
 }
