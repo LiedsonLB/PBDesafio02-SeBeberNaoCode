@@ -19,6 +19,7 @@ public class NotificationUser {
         email.setTo(user.getEmail());
         email.setSubject("Registration completed successfully!");
         email.setBody(user.getFirstName() + " Your registration has been completed!");
+        System.out.println(email.toString());
         rabbitTemplate.convertAndSend(routingKey, email.toString());
     }
 

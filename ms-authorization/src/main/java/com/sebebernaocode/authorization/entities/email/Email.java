@@ -17,7 +17,7 @@ public class Email {
 
     @Override
     public String toString() {
-        return "{" +
+        return "{\n" +
                 "\"fromEmail\": \"" + from + "\",\n" +
                 "\"toEmail\": \""+ to + "\",\n" +
                 "\"subject\": \"" + subject + "\",\n" +
