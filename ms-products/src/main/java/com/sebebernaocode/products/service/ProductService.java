@@ -6,6 +6,7 @@ import com.sebebernaocode.products.exception.EntityNotFoundException;
 import com.sebebernaocode.products.exception.InvalidQueryParameterException;
 import com.sebebernaocode.products.repository.ProductRepository;
 import com.sebebernaocode.products.repository.projection.ProductProjection;
+import com.sebebernaocode.products.web.dto.ProductCreateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -70,5 +71,15 @@ public class ProductService {
         }catch (IllegalArgumentException e) {
             throw new InvalidQueryParameterException(e.getMessage());
         }
+    }
+
+    public Product updateProduct(Long id, ProductCreateDto dto) {
+        Product product = findById(id);
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setImgUrl(dto.getImgUrl());
+        product.setPrice(dto.getPrice());
+        product.setCategories(dto.getCategories());
+        return productRepository.save(product);
     }
 }

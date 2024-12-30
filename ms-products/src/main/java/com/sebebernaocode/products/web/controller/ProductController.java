@@ -129,4 +129,20 @@ public class ProductController {
         PageableDto dto = PageableMapper.toDto(projection);
         return ResponseEntity.ok(dto);
     }
+
+    @Operation(
+            summary = "Atualizar os dados de um produto.",
+            description = "Recurso para atualizar os dados de um produto por id e dto.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Recurso atualizado com sucesso",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductResponseDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Não foi possivel localizar o recurso",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+            }
+    )
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductResponseDto> update(@PathVariable Long id, @RequestBody ProductCreateDto dto) {
+        Product updatedProduct = productService.updateProduct(id, dto);
+        return ResponseEntity.ok(ProductMapper.toDto(updatedProduct));
+    }
 }
