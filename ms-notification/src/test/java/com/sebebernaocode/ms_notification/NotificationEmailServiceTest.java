@@ -36,4 +36,8 @@ public class NotificationEmailServiceTest {
         when(notificationEmailRepository.save(INVALID_EMAIL)).thenThrow(EmailException.class);
         Assertions.assertThatThrownBy(() -> notificationEmailService.save(INVALID_EMAIL)).isInstanceOf(EmailException.class);
     }
+
+    @Test public void testSendEmail_InvalidEmail() {
+        Assertions.assertThatThrownBy(() -> notificationEmailService.send(INVALID_EMAIL)).isInstanceOf(EmailException.class);
+    }
 }
