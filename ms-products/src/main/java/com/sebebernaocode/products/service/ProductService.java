@@ -30,10 +30,6 @@ public class ProductService {
     @Transactional
     public Product create(Product product) {
             product.setDate(LocalDateTime.now());
-
-            for (Category category : product.getCategories()) {
-                category.setName(categoryService.findById(category.getId()).getName());
-            }
             return productRepository.save(product);
     }
 
@@ -79,7 +75,7 @@ public class ProductService {
         product.setDescription(dto.getDescription());
         product.setImgUrl(dto.getImgUrl());
         product.setPrice(dto.getPrice());
-        product.setCategories(dto.getCategories());
+        product.setCategories(categoryService.idToCategory(dto.getCategories()));
         return productRepository.save(product);
     }
 }

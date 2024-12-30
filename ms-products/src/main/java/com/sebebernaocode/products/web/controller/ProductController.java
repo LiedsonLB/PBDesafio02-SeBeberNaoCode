@@ -1,7 +1,9 @@
 package com.sebebernaocode.products.web.controller;
 
+import com.sebebernaocode.products.entity.Category;
 import com.sebebernaocode.products.entity.Product;
 import com.sebebernaocode.products.repository.projection.ProductProjection;
+import com.sebebernaocode.products.service.CategoryService;
 import com.sebebernaocode.products.service.ProductService;
 import com.sebebernaocode.products.web.dto.PageableDto;
 import com.sebebernaocode.products.web.dto.ProductCreateDto;
@@ -24,6 +26,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY;
 
 @Tag(name = "Produtos", description = "Contém os recursos de gerenciamento de produtos.")
@@ -33,6 +37,7 @@ import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
     @Operation(
             summary = "Criar um novo produto.",
@@ -46,7 +51,8 @@ public class ProductController {
     )
     @PostMapping
     public ResponseEntity<ProductResponseDto> create(@RequestBody @Valid ProductCreateDto dto) {
-        Product product = ProductMapper.toProduct(dto);
+        Set<Category> categories = categoryService.idToCategory(dto.getCategories());
+        Product product = ProductMapper.toProduct(dto, categories);
         product = productService.create(product);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(ProductMapper.toDto(product));

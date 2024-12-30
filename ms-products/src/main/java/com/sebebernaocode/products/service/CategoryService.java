@@ -10,6 +10,9 @@ import com.sebebernaocode.products.web.exception.CategoryNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class CategoryService {
@@ -43,5 +46,11 @@ public class CategoryService {
         Category category = findById(id);
         categoryRepository.delete(category);
         return category;
+    }
+
+    @Transactional
+    public Set<Category> idToCategory(Set<Long> ids){
+        return ids.stream()
+                .map(id -> findById(id)).collect(Collectors.toSet());
     }
 }
