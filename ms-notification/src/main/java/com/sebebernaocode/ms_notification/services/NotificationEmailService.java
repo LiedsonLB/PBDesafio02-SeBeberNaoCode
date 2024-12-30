@@ -1,5 +1,6 @@
 package com.sebebernaocode.ms_notification.services;
 
+import com.sebebernaocode.ms_notification.entities.Status;
 import com.sebebernaocode.ms_notification.exception.EmailException;
 import com.sebebernaocode.ms_notification.entities.NotificationEmail;
 import com.sebebernaocode.ms_notification.repositories.NotificationEmailRepository;
@@ -11,6 +12,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 public class NotificationEmailService {
@@ -31,11 +34,14 @@ public class NotificationEmailService {
             javaMailSender.send(message);
         }
         catch (Exception e) {
+            notificationEmail.setStatus(Status.ERROR);
             throw new EmailException(e.getMessage());
         }
     }
     public NotificationEmail save(NotificationEmail notificationEmail) {
         try{
+            notificationEmail.setSentDate(LocalDateTime.now());
+            notificationEmail.setStatus(Status.SENT);
             return notificationEmailRepository.save(notificationEmail);
         }
         catch (Exception e) {

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @Entity
@@ -25,4 +26,6 @@ public class NotificationEmail implements Serializable {
     private String subject;
     private String body;
     private String contentType;
+    private LocalDateTime sentDate;
+    private Status status;
 }
