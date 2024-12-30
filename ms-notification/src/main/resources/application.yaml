@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: ms-notification
+  rabbitmq:
+    queue: send-email
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  mail:
+    host: smtp.sendgrid.net
+    port: 587
+    username: apikey
+    password: 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
+    properties:
+      mail:
+        smtp:
+          auth: true
+      smtp:
+        starttls:
+          enable: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8081
+
