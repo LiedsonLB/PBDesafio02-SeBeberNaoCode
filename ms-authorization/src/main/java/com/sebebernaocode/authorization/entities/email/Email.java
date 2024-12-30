@@ -2,8 +2,10 @@ package com.sebebernaocode.authorization.entities.email;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter @Setter
 public class Email {
     private String from;
     @NotBlank
@@ -12,4 +14,15 @@ public class Email {
     private String subject;
     @NotBlank
     private String body;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"fromEmail\": \"" + from + "\",\n" +
+                "\"toEmail\": \""+ to + "\",\n" +
+                "\"subject\": \"" + subject + "\",\n" +
+                "\"body\": \""+ body + "\"\n" +
+                "}";
+    }
 }
+

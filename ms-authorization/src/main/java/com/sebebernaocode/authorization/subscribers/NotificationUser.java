@@ -11,8 +11,7 @@ public class NotificationUser {
     public NotificationUser(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
-    @Value(value = "send-email")
-    private String routingKey;
+    private final String routingKey = "send-email";
 
     public void publishRegistrationEmail (User user) {
         var email = new Email();
@@ -20,7 +19,7 @@ public class NotificationUser {
         email.setTo(user.getEmail());
         email.setSubject("Registration completed successfully!");
         email.setBody(user.getFirstName() + " Your registration has been completed!");
-        rabbitTemplate.convertAndSend(routingKey, email);
+        rabbitTemplate.convertAndSend(routingKey, email.toString());
     }
 
     public void publishChangePasswordEmail (User user) {
@@ -29,7 +28,7 @@ public class NotificationUser {
         email.setTo(user.getEmail());
         email.setSubject("Change password completed successfully!");
         email.setBody(user.getFirstName() + " Your password has been changed!");
-        rabbitTemplate.convertAndSend(routingKey, email);
+        rabbitTemplate.convertAndSend(routingKey, email.toString());
     }
 
     public void publishChangeEmail (User user) {
@@ -38,5 +37,6 @@ public class NotificationUser {
         email.setTo(user.getEmail());
         email.setSubject("Your information was changed successfully!");
         email.setBody(user.getFirstName() + " Your information on our system has been changed!");
+        rabbitTemplate.convertAndSend(routingKey, email.toString());
     }
 }
