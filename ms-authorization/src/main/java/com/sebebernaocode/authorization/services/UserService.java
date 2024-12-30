@@ -9,6 +9,7 @@ import com.sebebernaocode.authorization.exceptions.InvalidPasswordException;
 import com.sebebernaocode.authorization.exceptions.UniqueViolationException;
 import com.sebebernaocode.authorization.repositories.RoleRepository;
 import com.sebebernaocode.authorization.repositories.UserRepository;
+import com.sebebernaocode.authorization.subscribers.NotificationUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final NotificationUser notificationUser;
     private final PasswordEncoder encoder;
 
     @Transactional
@@ -30,6 +32,7 @@ public class UserService {
                     .orElseThrow(
                             () -> new EntityNotFoundException("Role 'OPERATOR' not found.")
                     ));
+            notificationUser.publishRegistrationEmail(user);
             return userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new UniqueViolationException(String.format("Email '%s' already exists.", user.getEmail()));
@@ -72,6 +75,7 @@ public class UserService {
                     throw new UniqueViolationException(String.format("Email '%s' already exists.", dto.getEmail()));
 
                 user.setEmail(dto.getEmail());
+                notificationUser.publishChangeEmail(user);
             }
         }
 
@@ -97,6 +101,7 @@ public class UserService {
             throw new InvalidPasswordException("Invalid password.");
 
         user.setPassword(encoder.encode(newPassword));
+        notificationUser.publishChangePasswordEmail(user);
     }
 
     public User findByEmail(String email) {
