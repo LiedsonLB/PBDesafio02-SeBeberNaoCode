@@ -40,6 +40,8 @@ public class CategoryService {
 
     @Transactional
     public Category deleteCategory(Long id) {
-        return null;
+        Category category = findById(id);
+        categoryRepository.delete(category);
+        return category;
     }
 }

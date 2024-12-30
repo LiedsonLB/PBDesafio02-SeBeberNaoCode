@@ -93,9 +93,10 @@ public class CategoryController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             }
     )
+    
     @DeleteMapping("/{id}")
-    public ResponseEntity<Category> deleteCategory(@PathVariable Long id) {
-        Category category = categoryService.deleteCategory(id);
-        return ResponseEntity.ok().body(category);
+    public ResponseEntity<CategoryResponseDto> deleteCategory(@PathVariable Long id) {
+        Category deletedCategory = categoryService.deleteCategory(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(CategoryMapper.toDto(deletedCategory));
     }
 }
