@@ -73,9 +73,7 @@ public class UserService {
 
                 if (emailExists)
                     throw new UniqueViolationException(String.format("Email '%s' already exists.", dto.getEmail()));
-
                 user.setEmail(dto.getEmail());
-                notificationUser.publishChangeEmail(user);
             }
         }
 
@@ -84,6 +82,8 @@ public class UserService {
 
         if (dto.getLastName() != null)
             user.setLastName(dto.getLastName());
+
+        notificationUser.publishChangeEmail(user);
     }
 
     @Transactional

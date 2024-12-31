@@ -27,5 +27,6 @@ public class NotificationEmail implements Serializable {
     private String body;
     private String contentType;
     private LocalDateTime sentDate;
+    @Enumerated(EnumType.STRING)
     private Status status;
 }

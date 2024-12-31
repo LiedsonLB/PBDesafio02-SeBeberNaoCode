@@ -4,12 +4,21 @@ spring:
 
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
       routes:
         - id: ms-authorization
           uri: http://localhost:8081
           predicates:
-            - Path=/**
+            - Path=/api/oauth/**, /api/users/**
 
+
+        - id: ms-products
+          uri: http://localhost:8083
+          predicates:
+            - Path=/categories/**, /api/products/**
 
   main:
     web-application-type: reactive
@@ -23,3 +32,4 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+
