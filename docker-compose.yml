@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  servereureka:
+    build: servereureka
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  ms-products:
+    build: ms-products
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  ms-notification:
+    build: ms-notification
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  ms-authorization:
+    build: ms-authorization
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  ms-cloudgateway:
+    build: ms-cloudgateway
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - servereureka
+      - ms-products
+      - ms-authorization
+      - ms-notification
+      - rabbitmq
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    ports:
+      - "15672:15672"
+      - "5672:5672" 
+
+  postgres:
+    image: "postgres:latest"
+    environment:
+      POSTGRES_USER: testando
+      POSTGRES_PASSWORD: testando
+      POSTGRES_DB: testando
+    ports:
+      - "5432:5432"
