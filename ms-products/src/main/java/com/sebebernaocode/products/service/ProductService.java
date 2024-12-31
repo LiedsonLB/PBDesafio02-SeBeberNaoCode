@@ -1,6 +1,5 @@
 package com.sebebernaocode.products.service;
 
-import com.sebebernaocode.products.entity.Category;
 import com.sebebernaocode.products.entity.Product;
 import com.sebebernaocode.products.exception.EntityNotFoundException;
 import com.sebebernaocode.products.exception.InvalidQueryParameterException;
@@ -8,7 +7,6 @@ import com.sebebernaocode.products.repository.ProductRepository;
 import com.sebebernaocode.products.repository.projection.ProductProjection;
 import com.sebebernaocode.products.web.dto.ProductCreateDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -42,15 +40,11 @@ public class ProductService {
 
     @Transactional
     public void delete(Long id) {
-        try {
             if (productRepository.existsById(id)) {
                 productRepository.deleteById(id);
             } else {
                 throw new EntityNotFoundException(String.format("product id: %s not found in the database", id));
             }
-        } catch (DataIntegrityViolationException e) {
-            throw new RuntimeException(String.format("Error trying to delete product, error: %s", e.getMessage()));
-        }
     }
 
     @Transactional(readOnly = true)
