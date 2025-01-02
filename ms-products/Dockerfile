@@ -14,6 +14,6 @@ WORKDIR /app
 
 COPY --from=build /app/target/ms-products-0.0.1-SNAPSHOT.jar /app/ms-products.jar
 
-EXPOSE 8081
+EXPOSE 8083
 
 ENTRYPOINT ["java", "-jar", "ms-products.jar"]

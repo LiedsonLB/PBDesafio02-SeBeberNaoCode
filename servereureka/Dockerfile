@@ -14,6 +14,6 @@ WORKDIR /app
 
 COPY --from=build /app/target/servereureka-0.0.1-SNAPSHOT.jar /app/servereureka.jar
 
-EXPOSE 8080
+EXPOSE 8761
 
 ENTRYPOINT ["java", "-jar", "servereureka.jar"]
