@@ -1,5 +1,6 @@
 package com.sebebernaocode.products.web.exception;
 
+import com.sebebernaocode.products.exception.CategoryUniqueViolationException;
 import com.sebebernaocode.products.exception.EntityNotFoundException;
 import com.sebebernaocode.products.exception.InvalidQueryParameterException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,7 +39,7 @@ public class ApiExceptionHandler {
                 .body(new ErrorMessage(request, HttpStatus.UNPROCESSABLE_ENTITY, "Invalid path params"));
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
+    @ExceptionHandler({EntityNotFoundException.class, CategoryNotFoundException.class})
     public ResponseEntity<ErrorMessage> entityNotFoundException(RuntimeException ex, HttpServletRequest request) {
 
         log.error("Api Error - ", ex);
@@ -67,4 +68,15 @@ public class ApiExceptionHandler {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage()));
     }
+
+    @ExceptionHandler({CategoryUniqueViolationException.class})
+    public ResponseEntity<ErrorMessage> uniqueViolationException(RuntimeException ex, HttpServletRequest request) {
+
+        log.error("Api Error - ", ex);
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.CONFLICT, ex.getMessage()));
+    }
+
 }

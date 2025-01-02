@@ -25,13 +25,13 @@ public class SecurityConfiguration {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .authorizeHttpRequests(
                         auth -> auth
-//                                .requestMatchers(
-//                                        antMatcher("/ms-products.html"),
-//                                        antMatcher("/ms-products/**"),
-//                                        antMatcher("/swagger-ui.html"),
-//                                        antMatcher("/swagger-ui/**"),
-//                                        antMatcher("/webjars/**")
-//                                ).permitAll()
+                                .requestMatchers(
+                                        antMatcher("/ms-products.html"),
+                                        antMatcher("/ms-products/**"),
+                                        antMatcher("/swagger-ui.html"),
+                                        antMatcher("/swagger-ui/**"),
+                                        antMatcher("/webjars/**")
+                                ).permitAll()
                                 .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

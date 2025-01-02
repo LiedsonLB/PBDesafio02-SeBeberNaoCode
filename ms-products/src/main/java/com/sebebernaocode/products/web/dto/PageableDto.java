@@ -18,7 +18,7 @@ public class PageableDto {
     private int number;
 
     @JsonProperty("linesPerPage")
-    private int size; // isso é o que regula o tamanho da pagina, mas só aceita se passar como size
+    private int size;
 
     private int totalPages;
 

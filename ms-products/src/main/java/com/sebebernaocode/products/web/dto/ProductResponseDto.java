@@ -15,7 +15,7 @@ import java.util.Set;
 public class ProductResponseDto {
 
     private Long id;
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
     private String name;
     private String description;
