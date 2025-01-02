@@ -1,5 +1,7 @@
 package com.sebebernaocode.products.service;
 
+import com.sebebernaocode.products.exception.CategoryUniqueViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +25,7 @@ public class CategoryService {
         boolean nameExists = categoryRepository.existsByName(category.getName());
         if (nameExists) {
             System.out.println("Category name already exists: " + category.getName());
-            throw new RuntimeException("Category name already exists");
+            throw new CategoryUniqueViolationException("Category name already exists");
         }
         return categoryRepository.save(category);
     }

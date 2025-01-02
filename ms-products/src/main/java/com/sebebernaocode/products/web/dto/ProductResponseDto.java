@@ -14,7 +14,8 @@ import java.util.Set;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class ProductResponseDto {
 
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private Long id;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
     private String name;
     private String description;
