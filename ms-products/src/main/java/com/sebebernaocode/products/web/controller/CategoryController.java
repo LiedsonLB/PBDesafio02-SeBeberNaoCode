@@ -1,7 +1,9 @@
 package com.sebebernaocode.products.web.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,6 +40,7 @@ public class CategoryController {
     @Operation(
             summary = "Criar uma nova categoria.",
             description = "Recurso para criar uma nova categoria.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "201", description = "Categoria criada com sucesso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CategoryResponseDto.class))),
@@ -46,6 +49,7 @@ public class CategoryController {
             }
     )
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
     public ResponseEntity<CategoryResponseDto> createCategory(@RequestBody  @Valid CategoryCreateDto dto) {
         Category SavedCategory = categoryService.save(CategoryMapper.toCategory(dto));
         return ResponseEntity.status(HttpStatus.CREATED).body(CategoryMapper.toDto(SavedCategory));
@@ -54,6 +58,7 @@ public class CategoryController {
     @Operation(
             summary = "Buscar uma categoria.",
             description = "Recurso para buscar uma categoria por id.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Recurso localizado com sucesso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductResponseDto.class))),
@@ -62,6 +67,7 @@ public class CategoryController {
             }
     )
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
     public ResponseEntity<CategoryResponseDto> getByID(@PathVariable Long id) {
         Category category = categoryService.findById(id);
         return ResponseEntity.ok().body(CategoryMapper.toDto(category));
@@ -70,6 +76,7 @@ public class CategoryController {
     @Operation(
             summary = "Altera uma categoria.",
             description = "Recurso para atualizar uma categoria por id.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Recurso atualizado com sucesso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductResponseDto.class))),
@@ -78,6 +85,7 @@ public class CategoryController {
             }
     )
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
     public ResponseEntity<CategoryResponseDto> updateCategory(@PathVariable Long id, @RequestBody CategoryCreateDto dto) {
         Category updatedCategory = categoryService.updateCategory(id, dto);
         return ResponseEntity.ok().body(CategoryMapper.toDto(updatedCategory));
@@ -86,6 +94,7 @@ public class CategoryController {
     @Operation(
             summary = "Deleta uma categoria.",
             description = "Recurso para deletar uma categoria por id.",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Recurso deletado com sucesso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductResponseDto.class))),
@@ -95,6 +104,7 @@ public class CategoryController {
     )
     
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
     public ResponseEntity<CategoryResponseDto> deleteCategory(@PathVariable Long id) {
         Category deletedCategory = categoryService.deleteCategory(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(CategoryMapper.toDto(deletedCategory));
