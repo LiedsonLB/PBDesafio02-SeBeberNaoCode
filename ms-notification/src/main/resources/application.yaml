@@ -21,9 +21,9 @@ spring:
         starttls:
           enable: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/db_notification
     username: postgres
-    password: 1234
+    password: root
   jpa:
     hibernate:
       ddl-auto: update

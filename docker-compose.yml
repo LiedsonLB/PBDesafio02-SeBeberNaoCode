@@ -1,70 +1,92 @@
 version: '3.8'
 
+networks:
+  app-network:
+    driver: bridge
+
 services:
   servereureka:
     build: servereureka
     ports:
       - "8761:8761"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
     depends_on:
-      - postgres
       - rabbitmq
+    networks:
+      - app-network
 
   ms-products:
     build: ms-products
     ports:
-      - "8081:8081"
+      - "8083:8083"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/db_products
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
     depends_on:
       - postgres
       - rabbitmq
+    networks:
+      - app-network
 
   ms-notification:
     build: ms-notification
     ports:
       - "8082:8082"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/db_notification
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
     depends_on:
       - postgres
       - rabbitmq
+    networks:
+      - app-network
 
   ms-authorization:
     build: ms-authorization
     ports:
-      - "8083:8083"
+      - "8081:8081"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/db_users
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
     depends_on:
       - postgres
       - rabbitmq
+      - servereureka
+    networks:
+      - app-network
 
   ms-cloudgateway:
     build: ms-cloudgateway
     ports:
       - "8080:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - servereureka
       - ms-products
       - ms-authorization
       - ms-notification
-      - rabbitmq
+    networks:
+      - app-network
 
   rabbitmq:
-    image: "rabbitmq:3-management"
+    image: "rabbitmq:4.0-management-alpine"
     ports:
       - "15672:15672"
-      - "5672:5672" 
+      - "5672:5672"
+    networks:
+      - app-network
 
   postgres:
+    container_name: "postgres"
     image: "postgres:latest"
     environment:
-      POSTGRES_USER: testando
-      POSTGRES_PASSWORD: testando
-      POSTGRES_DB: testando
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: test
     ports:
-      - "5432:5432"
+      - "5433:5432"
+    volumes:
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
