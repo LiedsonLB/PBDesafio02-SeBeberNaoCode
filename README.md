@@ -1,4 +1,5 @@
 # Desafio 02 - Se Beber Não Code
+![arquitetura de microsserviços imagem](/snapshots/challenge-system.png)
 
 ## Sobre o Projeto
 
@@ -104,7 +105,7 @@ http://localhost:8083/swagger-ui/index.html
 Para gerar o relatório de cobertura de testes, execute:
 
 ```bash
-mvn clean test jacoco:report
+mvn clean verify jacoco:report
 ```
 
 O relatório de cobertura estará disponível em:
@@ -129,3 +130,27 @@ target/site/jacoco/index.html
 - [Guilherme Johann ](https://github.com/lgjohann)
 - [Eduardo Marchesan](https://github.com/edMarchesan)
 - [Francisco Liédson](https://github.com/LiedsonLB)
+
+## Imagens do Projeto
+
+### Coberura de Testes com Jacoco MS-Authorization
+![Coberura de Testes com Jacoco MS-Authorization imagem](/snapshots/ms-authorization-jacoco.png)
+
+### Coberura de Testes com Jacoco MS-Products
+![Coberura de Testes com Jacoco MS-Products imagem](/snapshots/ms-products-jacoco.png)
+
+### Coberura de Testes com Jacoco MS-Notification
+![Coberura de Testes com Jacoco MS-Notification imagem](/snapshots/ms-notification-jacoco.png)
+
+### Swagger do MS-Authorization
+![Swagger do MS-Authorization imagem](/snapshots/ms-authorization-swagger.jpeg)
+
+### Swagger do MS-Products
+![Swagger do MS-Products imagem](/snapshots/ms-products-swagger.jpeg)
+
+### RabbitMQ
+![RabbitMQ imagem](/snapshots/rabbitmq.jpeg)
+
+### Containers Docker
+
+![Containers Docker imagem](/snapshots/docker-containers.jpeg)
