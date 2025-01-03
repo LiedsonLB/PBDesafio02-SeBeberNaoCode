@@ -17,7 +17,7 @@ spring:
         - id: ms-products
           uri: http://${GATEWAY_URI_PRODUCTS:localhost}:8083
           predicates:
-            - Path=/categories/**, /api/products/**
+            - Path=/api/categories/**, /api/products/**
 
   main:
     web-application-type: reactive
