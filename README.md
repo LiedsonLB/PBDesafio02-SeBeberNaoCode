@@ -27,10 +27,10 @@ Gerencia autenticação e autorização dos usuários.
 
 | **Método** | **Endpoint**       | **Descrição**                   |
 |------------|--------------------|---------------------------------|
-| POST       | `/users`           | Cria um novo usuário           |
-| GET        | `/users/:id`       | Retorna detalhes de um usuário |
-| PUT        | `/users/:id`       | Atualiza informações do usuário|
-| POST       | `/oauth/token`     | Gera token de autenticação     |
+| POST       | `/api//users`           | Cria um novo usuário           |
+| GET        | `/api//users/:id`       | Retorna detalhes de um usuário |
+| PUT        | `/api//users/:id`       | Atualiza informações do usuário|
+| POST       | `/api//oauth/token`     | Gera token de autenticação     |
 | PATCH      | `/api/users/:id/password` | Atualiza a senha do usuário| 
 
 ---
@@ -40,14 +40,14 @@ Gerencia produtos e categorias.
 
 | **Método** | **Endpoint**                                  | **Descrição**                               |
 |------------|-----------------------------------------------|---------------------------------------------|
-| POST       | `/products`                                   | Cria um novo produto                        |
-| GET        | `/products/:id`                               | Retorna detalhes de um produto              |
-| GET        | `/products/?page=1&linesPerPage=5&direction=DESC&orderBy=name` | Lista produtos paginados                   |
-| DELETE     | `/products/:id`                               | Remove um produto                           |
-| POST       | `/categories`                                 | Cria uma nova categoria                     |
-| GET        | `/categories/:id`                             | Retorna detalhes de uma categoria           |
-| DELETE     | `/categories/:id`                             | Remove uma categoria                        |
-| PUT        | `/categories/:id`                             | Atualiza informações de uma categoria       |
+| POST       | `/api//products`                                   | Cria um novo produto                        |
+| GET        | `/api//products/:id`                               | Retorna detalhes de um produto              |
+| GET        | `/api//products/?page=1&linesPerPage=5&direction=DESC&orderBy=name` | Lista produtos paginados                   |
+| DELETE     | `/api//products/:id`                               | Remove um produto                           |
+| POST       | `/api/categories`                                 | Cria uma nova categoria                     |
+| GET        | `/api//categories/:id`                             | Retorna detalhes de uma categoria           |
+| DELETE     | `/api//categories/:id`                             | Remove uma categoria                        |
+| PUT        | `/api//categories/:id`                             | Atualiza informações de uma categoria       |
 
 ---
 
