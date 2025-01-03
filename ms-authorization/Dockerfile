@@ -14,6 +14,6 @@ WORKDIR /app
 
 COPY --from=build /app/target/ms-authorization-0.0.1-SNAPSHOT.jar /app/ms-authorization.jar
 
-EXPOSE 8080
+EXPOSE 8081
 
 ENTRYPOINT ["java", "-jar", "ms-authorization.jar"]
