@@ -154,20 +154,6 @@ public class ProductIT {
     }
 
     @Test
-    public void getProductById_WithInvalidAuthToken_Returns403() {
-        ErrorMessage sut = testClient
-                .get()
-                .uri("/api/products/101")
-                .exchange()
-                .expectStatus().isForbidden()
-                .expectBody(ErrorMessage.class)
-                .returnResult().getResponseBody();
-
-        Assertions.assertThat(sut).isNotNull();
-        Assertions.assertThat(sut.getStatus()).isEqualTo(403);
-    }
-
-    @Test
     public void getProductById_WithUnexistingId_Returns404() {
         ErrorMessage sut = testClient
                 .get()
@@ -266,20 +252,6 @@ public class ProductIT {
         org.assertj.core.api.Assertions.assertThat(sut.getTotalPages()).isEqualTo(3);
         org.assertj.core.api.Assertions.assertThat(sut.getNumber()).isEqualTo(0);
         org.assertj.core.api.Assertions.assertThat(sut.getSize()).isEqualTo(1);
-    }
-
-    @Test
-    public void getAllProducts_WithInvalidAuthToken_Returns403() {
-        ErrorMessage sut = testClient
-                .get()
-                .uri("/api/products?page=0&linesPerPage=1")
-                .exchange()
-                .expectStatus().isForbidden()
-                .expectBody(ErrorMessage.class)
-                .returnResult().getResponseBody();
-
-        Assertions.assertThat(sut).isNotNull();
-        Assertions.assertThat(sut.getStatus()).isEqualTo(403);
     }
 
     @Test
@@ -388,5 +360,4 @@ public class ProductIT {
         Assertions.assertThat(sut).isNotNull();
         Assertions.assertThat(sut.getStatus()).isEqualTo(404);
     }
-
 }

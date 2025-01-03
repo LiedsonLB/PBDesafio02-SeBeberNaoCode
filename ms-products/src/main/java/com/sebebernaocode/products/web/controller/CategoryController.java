@@ -11,7 +11,6 @@ import com.sebebernaocode.products.entity.Category;
 import com.sebebernaocode.products.service.CategoryService;
 import com.sebebernaocode.products.web.dto.CategoryCreateDto;
 import com.sebebernaocode.products.web.dto.CategoryResponseDto;
-import com.sebebernaocode.products.web.dto.ProductResponseDto;
 import com.sebebernaocode.products.web.dto.mapper.CategoryMapper;
 import com.sebebernaocode.products.web.exception.ErrorMessage;
 
@@ -32,7 +31,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 @Tag(name = "Categorias", description = "Contém os recursos de gerenciamento de categorias.")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("api/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -58,16 +57,14 @@ public class CategoryController {
     @Operation(
             summary = "Buscar uma categoria.",
             description = "Recurso para buscar uma categoria por id.",
-            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Recurso localizado com sucesso",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductResponseDto.class))),
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CategoryResponseDto.class))),
                     @ApiResponse(responseCode = "404", description = "Não foi possivel localizar o recurso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             }
     )
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
     public ResponseEntity<CategoryResponseDto> getByID(@PathVariable Long id) {
         Category category = categoryService.findById(id);
         return ResponseEntity.ok().body(CategoryMapper.toDto(category));
@@ -79,7 +76,7 @@ public class CategoryController {
             security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Recurso atualizado com sucesso",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductResponseDto.class))),
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CategoryResponseDto.class))),
                     @ApiResponse(responseCode = "404", description = "Não foi possivel localizar o recurso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             }
@@ -96,17 +93,16 @@ public class CategoryController {
             description = "Recurso para deletar uma categoria por id.",
             security = @SecurityRequirement(name = "security"),
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Recurso deletado com sucesso",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProductResponseDto.class))),
+                    @ApiResponse(responseCode = "204", description = "Recurso deletado com sucesso",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CategoryResponseDto.class))),
                     @ApiResponse(responseCode = "404", description = "Não foi possivel localizar o recurso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             }
     )
-    
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
-    public ResponseEntity<CategoryResponseDto> deleteCategory(@PathVariable Long id) {
-        Category deletedCategory = categoryService.deleteCategory(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(CategoryMapper.toDto(deletedCategory));
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+        categoryService.deleteCategory(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
