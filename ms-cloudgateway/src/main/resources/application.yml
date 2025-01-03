@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: ms-cloudgateway
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: ms-authorization
+          uri: http://${GATEWAY_URI_AUTH:localhost}:8081
+          predicates:
+            - Path=/api/oauth/**, /api/users/**
+
+        - id: ms-products
+          uri: http://${GATEWAY_URI_PRODUCTS:localhost}:8083
+          predicates:
+            - Path=/api/categories/**, /api/products/**
+
+  main:
+    web-application-type: reactive
+
+server:
+  port: 8080
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://servereureka:8761/eureka
+
