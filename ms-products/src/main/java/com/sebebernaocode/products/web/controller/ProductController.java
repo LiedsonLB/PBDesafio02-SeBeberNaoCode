@@ -70,20 +70,15 @@ public class ProductController {
     @Operation(
             summary = "Buscar um produto.",
             description = "Recurso para buscar um produto por id.",
-            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Recurso localizado com sucesso",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ProductResponseDto.class))),
-                    @ApiResponse(responseCode = "403", description = "Recurso permitido apenas para perfis ADMIN e OPERATOR",
-                            content = @Content(mediaType = " application/json;charset=UTF-8",
-                                    schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "404", description = "Não foi possivel localizar o recurso",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorMessage.class)))
             }
     )
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDto> getById(@PathVariable Long id) {
         Product product = productService.findById(id);
@@ -113,7 +108,6 @@ public class ProductController {
 
     @Operation(summary = "Localizar os registros de produtos",
             description = "Recurso para buscar todos os registros de produtos",
-            security = @SecurityRequirement(name = "security"),
             parameters = {
                     @Parameter(in = QUERY, name = "page",
                             content = @Content(schema = @Schema(type = "integer", defaultValue = "0")),
@@ -136,9 +130,6 @@ public class ProductController {
                     @ApiResponse(responseCode = "200", description = "Recurso localizado com sucesso",
                             content = @Content(mediaType = " application/json;charset=UTF-8",
                                     schema = @Schema(implementation = PageableDto.class))),
-                    @ApiResponse(responseCode = "403", description = "Recurso permitido apenas para perfis ADMIN e OPERATOR",
-                            content = @Content(mediaType = " application/json;charset=UTF-8",
-                                    schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "422", description = "Parâmetros de pesquisa inválidos. Possiveis causas: <br>" +
                             "- Campo de ordenação inválido no parâmetro de pesquisa 'orderBy'; <br/>" +
                             "- Valor do parâmetro de pesquisa 'direction' inválido; <br/>" +
@@ -147,7 +138,6 @@ public class ProductController {
                                     schema = @Schema(implementation = ErrorMessage.class)))
 
             })
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
     @GetMapping
     public ResponseEntity<PageableDto> getAll(
             @RequestParam(defaultValue = "0") int page,

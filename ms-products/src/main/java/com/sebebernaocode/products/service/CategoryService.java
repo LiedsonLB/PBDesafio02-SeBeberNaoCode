@@ -1,6 +1,9 @@
 package com.sebebernaocode.products.service;
 
+import com.sebebernaocode.products.entity.Product;
 import com.sebebernaocode.products.exception.CategoryUniqueViolationException;
+import com.sebebernaocode.products.exception.EntityNotFoundException;
+import com.sebebernaocode.products.repository.ProductRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +15,7 @@ import com.sebebernaocode.products.web.exception.CategoryNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,6 +23,8 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+
+    private final ProductRepository productRepository;
 
     @Transactional
     public Category save(Category category) {
@@ -44,10 +50,18 @@ public class CategoryService {
     }
 
     @Transactional
-    public Category deleteCategory(Long id) {
-        Category category = findById(id);
-        categoryRepository.delete(category);
-        return category;
+    public void deleteCategory(Long id) {
+        if (categoryRepository.existsById(id)) {
+            List<Product> products = productRepository.findByCategoriesId(id);
+            for (Product product : products) {
+                product.getCategories().removeIf(category -> category.getId().equals(id));
+                productRepository.save(product);
+            }
+            categoryRepository.deleteById(id);
+        } else {
+            throw new EntityNotFoundException(String.format("category id: %s not found in the database", id));
+        }
+
     }
 
     @Transactional
