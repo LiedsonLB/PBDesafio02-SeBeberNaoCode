@@ -149,7 +149,7 @@ target/site/jacoco/index.html
 ![Swagger do MS-Products imagem](/snapshots/ms-products-swagger.jpeg)
 
 ### RabbitMQ
-![RabbitMQ imagem](/snapshots/rabbitmq.jpeg)
+![RabbitMQ imagem](/snapshots/rabbitMQ.jpeg)
 
 ### Containers Docker
 
