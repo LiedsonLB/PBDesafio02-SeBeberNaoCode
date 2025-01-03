@@ -10,13 +10,12 @@ spring:
           lower-case-service-id: true
       routes:
         - id: ms-authorization
-          uri: http://localhost:8081
+          uri: http://${GATEWAY_URI_AUTH:localhost}:8081
           predicates:
             - Path=/api/oauth/**, /api/users/**
 
-
         - id: ms-products
-          uri: http://localhost:8083
+          uri: http://${GATEWAY_URI_PRODUCTS:localhost}:8083
           predicates:
             - Path=/categories/**, /api/products/**
 
@@ -25,11 +24,10 @@ spring:
 
 server:
   port: 8080
-
 eureka:
   client:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://servereureka:8761/eureka
 
