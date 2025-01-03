@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,7 +26,7 @@ public class ExceptionHandlerController {
     }
 
     @ExceptionHandler(UniqueViolationException.class)
-    public ResponseEntity<StandardError> uniqueViolationException(RuntimeException e, HttpServletRequest request){
+    public ResponseEntity<StandardError> uniqueViolationException(RuntimeException e, HttpServletRequest request) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -33,7 +34,7 @@ public class ExceptionHandlerController {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<StandardError> entityNotFoundException(RuntimeException e, HttpServletRequest request){
+    public ResponseEntity<StandardError> entityNotFoundException(RuntimeException e, HttpServletRequest request) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -41,10 +42,19 @@ public class ExceptionHandlerController {
     }
 
     @ExceptionHandler(InvalidPasswordException.class)
-    public ResponseEntity<StandardError> invalidPasswordException(RuntimeException e, HttpServletRequest request){
+    public ResponseEntity<StandardError> invalidPasswordException(RuntimeException e, HttpServletRequest request) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new StandardError(request, HttpStatus.BAD_REQUEST, e.getMessage()));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<StandardError> accessDeniedException(AccessDeniedException exception, HttpServletRequest request) {
+
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new StandardError(request, HttpStatus.FORBIDDEN, exception.getMessage()));
     }
 }
